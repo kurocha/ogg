@@ -5,8 +5,8 @@
 
 required_version "0.5"
 
-define_package "ogg" do |package|
-	package.install do |environment|
+define_target "ogg" do |target|
+	target.install do |environment|
 		environment.use in:(package.path + 'libogg-1.3.0') do |config|
 			Commands.run("make", "clean") if File.exist? "Makefile"
 				
@@ -22,9 +22,9 @@ define_package "ogg" do |package|
 		end
 	end
 	
-	package.depends :system
+	target.depends :platform
 	
-	package.provides "Library/ogg" do
+	target.provides "Library/ogg" do
 		append linkflags "-logg"
 	end
 end

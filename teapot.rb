@@ -3,22 +3,22 @@
 #  This file is part of the "Teapot" project, and is released under the MIT license.
 #
 
-required_version "0.5"
+required_version "0.6"
 
 define_target "ogg" do |target|
 	target.install do |environment|
-		environment.use in:(package.path + 'libogg-1.3.0') do |config|
-			Commands.run("make", "clean") if File.exist? "Makefile"
-				
-			Commands.run("./configure",
-				"--prefix=#{config.install_prefix}",
-				"--disable-dependency-tracking",
-				"--enable-shared=no",
-				"--enable-static=yes",
-				*config.configure
-			)
+		install_external(package.path, "libogg-1.3.0", environment) do |config, fresh|
+			if fresh
+				Commands.run("./configure",
+					"--prefix=#{config.install_prefix}",
+					"--disable-dependency-tracking",
+					"--enable-shared=no",
+					"--enable-static=yes",
+					*config.configure
+				)
+			end
 			
-			Commands.run("make", "install")
+			Commands.make_install
 		end
 	end
 	
